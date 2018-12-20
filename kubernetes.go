@@ -62,13 +62,15 @@ func (kd *KubernetesDiscoverer) GetDestinationsForService(serviceName string) ([
 					// the config structure. This should probably use a service
 					// name and find the pods from that selector, doing a
 					// similar port search as before.
-					if isGrpc && port.Name == "grpc" {
-						forwardPort = strconv.Itoa(int(port.ContainerPort))
-						log.WithField("port", forwardPort).Debug("Found grpc port")
+					if port.Name == "grpc" {
+						if isGrpc {
+							forwardPort = strconv.Itoa(int(port.ContainerPort))
+							log.WithField("port", forwardPort).Debug("Found grpc port")
+						}
 						break
 					}
 
-					if !isGrpc && port.Name == "http" {
+					if port.Name == "http" {
 						forwardPort = strconv.Itoa(int(port.ContainerPort))
 						log.WithField("port", forwardPort).Debug("Found http port")
 						break
