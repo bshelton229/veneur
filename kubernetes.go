@@ -66,8 +66,9 @@ func (kd *KubernetesDiscoverer) GetDestinationsForService(serviceName string) ([
 						if isGrpc {
 							forwardPort = strconv.Itoa(int(port.ContainerPort))
 							log.WithField("port", forwardPort).Debug("Found grpc port")
+							break
 						}
-						break
+						continue
 					}
 
 					if port.Name == "http" {
